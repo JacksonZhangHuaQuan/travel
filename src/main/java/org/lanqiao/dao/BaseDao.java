@@ -8,7 +8,7 @@ public interface BaseDao<T> {
     int executeUpdate(String sql, Object[] obj);
 
     //根据条件进行查询
-    List<T> excuteQuery(String sql, Object[] obj);
+    List<T> executeQuery(String sql, Object[] obj);
 
     //查询所有
     List<T> executeQuery(String sql);

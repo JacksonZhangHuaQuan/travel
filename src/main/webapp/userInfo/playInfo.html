@@ -1,0 +1,337 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+    <!--<meta charset="UTF-8">-->
+    <!--<title>游记</title>-->
+    <!--&lt;!&ndash;<link rel="stylesheet" href="../css/users1.css">&ndash;&gt;-->
+    <!--<link rel="stylesheet" href="../ui/layui/css/layui.css">-->
+    <!--<link rel="stylesheet" href="../css/playInfo.css">-->
+    <!--<script src="../js/jquery-3.3.1.js"></script>-->
+    <!--<script src="../ui/layui/layui.all.js"></script>-->
+    <!--<script src="../js/userInfo.js"></script>-->
+
+    <!--<script>-->
+        <!--$(function () {-->
+            <!--$("body").on("click", ".edit", function () {-->
+                <!--var id = $(this).parent().attr("id");-->
+                <!--// window.location.href = "UpdateStrategyForm.html?a="+id;-->
+                <!--window.open("UpdateStrategyForm.html?id="+id)-->
+            <!--});-->
+            <!--$("body").on("click", ".show", function () {-->
+                <!--var id = $(this).parent().attr("id");-->
+                <!--parent.window.location.href="../show.html?id="+id;-->
+            <!--});-->
+            <!--$("body").on("click", ".delete", function () {-->
+                <!--var id = $(this).parent().attr("id");-->
+                <!--var $del = $(this).parent().parent().parent();-->
+                <!--layer.confirm('您确定要删除吗？', {-->
+                    <!--btn: ['确定', '在考虑一下'] //按钮-->
+                <!--}, function () {-->
+                    <!--layer.load(2);-->
+                    <!--$.ajax({-->
+                        <!--url: "/DeleteStrategyPlace",-->
+                        <!--type: "post",-->
+                        <!--data: {"strategy_id": id},-->
+                        <!--dataType: "text",-->
+                        <!--success: function (ret) {-->
+                            <!--layer.closeAll('loading');-->
+                            <!--if (ret == "1") {-->
+                                <!--layer.msg("删除成功！", {icon: 6});-->
+                                <!--$del.remove();-->
+                            <!--} else {-->
+                                <!--layer.closeAll('loading');-->
+                                <!--layer.msg('删除失败！', {icon: 5});-->
+                            <!--}-->
+                        <!--}-->
+                    <!--})-->
+                <!--}, function () {-->
+                <!--});-->
+            <!--});-->
+        <!--})-->
+    <!--</script>-->
+    <!--<link rel="stylesheet" href="../css/users.css">-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div id="play">-->
+    <!--<div class="person_strategy"><h1>个人游记</h1></div>-->
+    <!--<hr/>-->
+<!--</div>-->
+
+<!--<script type="text/javascript">-->
+    <!--$(function () {-->
+        <!--$.ajax({-->
+            <!--url: "/QueryUserStrategy",-->
+            <!--type: "post",-->
+            <!--data: {"user_id": 1},-->
+            <!--dataType: "json",-->
+            <!--beforeSend: function () {-->
+                <!--layer.load(2);-->
+                <!--$("#submit").attr({disabled: "disabled"});-->
+            <!--},-->
+            <!--success: function (ret) {-->
+                <!--layer.closeAll('loading');-->
+                <!--if (ret == 0) {-->
+                    <!--$node = $("<h2 style='color: red'>您还未发表过游记！</h2>");-->
+                    <!--$('#play').append($node);-->
+                <!--} else {-->
+                    <!--for (var i = 0; i < ret.length; i++) {-->
+                        <!--$node = $(' <div class="oneStrategy" >\n' +-->
+                            <!--'        <div class="strategy_info">\n' +-->
+                            <!--'            <div class="strategy_info_left">\n' +-->
+                            <!--'                <h2 class="strategy_info_title">' + ret[i].strategy_title + '</h2>\n' +-->
+                            <!--'                <span class="strategy_info_address">' + ret[i].strategy_address + '</span>\n' +-->
+                            <!--'                <span class="strategy_info_days">' + ret[i].strategy_days + '</span>\n' +-->
+                            <!--'                <span class="strategy_info_type">' + ret[i].strategy_season + '</span>\n' +-->
+                            <!--'                <span class="strategy_info_status">' + ret[i].strategy_type + '</span>\n' +-->
+                            <!--'            </div>\n' +-->
+                            <!--'            <div class="strategy_info_img">\n' +-->
+                            <!--'                <img src= "../' + ret[i].strategy_firstimg + '" alt="图片无法显示" id="strategy_info_img">\n' +-->
+                            <!--'            </div>\n' +-->
+                            <!--'        </div>\n' +-->
+                            <!--'        <div class="strategy_option">\n' +-->
+                            <!--'            <h3 class="strategy_info_status">' + ret[i].strategy_status + '</h3>\n' +-->
+                            <!--'            <div class="strategy_info_but" id="' + ret[i].strategy_id + '" >\n' +-->
+                            <!--'                <a class="option edit">编辑</a>\n' +-->
+                            <!--'                <a class="option show">查看</a>\n' +-->
+                            <!--'                <a class="option delete">删除</a>\n' +-->
+                            <!--'            </div>\n' +-->
+                            <!--'\n' +-->
+                            <!--'        </div>\n' +-->
+                            <!--'    </div>');-->
+                        <!--$('#play').append($node);-->
+                        <!--//未审核的可以编辑-->
+                        <!--if (ret[i].strategy_status == "未审核"){-->
+                            <!--$("#"+ret[i].strategy_id).parent().children("h3").css("color","rgba(255,87,34,0.89)");-->
+                            <!--$("#"+ret[i].strategy_id).children(".show").remove();-->
+                        <!--}else {-->
+                            <!--$("#"+ret[i].strategy_id).children(".edit").remove();-->
+                        <!--}-->
+                    <!--}-->
+
+                <!--}-->
+
+            <!--},-->
+            <!--error: function (ret) {-->
+                <!--layer.closeAll('loacing');-->
+                <!--layer.msg("请求数据失败!")-->
+                <!--// layer.alert("error" + ret.message);-->
+            <!--}-->
+        <!--})-->
+    <!--});-->
+
+
+<!--</script>-->
+<!--&lt;!&ndash;<script src="../js/playInfo.js"></script>&ndash;&gt;-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>游记</title>
+    <!--<link rel="stylesheet" href="../css/users1.css">-->
+    <link rel="stylesheet" href="../ui/layui/css/layui.css">
+    <link rel="stylesheet" href="../css/playInfo.css">
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script src="../ui/layui/layui.all.js"></script>
+    <script src="../js/userInfo.js"></script>
+
+    <script>
+        $(function () {
+            $.ajax({
+                url: "/getSession",
+                type: "post",
+                data: {"sessionid": "sessionkey"},
+                dataType: "json",
+                success: function (ret) {
+                    if (ret[0] == null) {
+                        $("#play").hide();
+                        layer.alert("您没有登录，将自动跳转到登录页面！");
+                        setTimeout('parent.window.location="../login.html"',3000)
+                    } else {
+                        $.ajax({
+                            url: "/QueryUserStrategy",
+                            type: "post",
+                            data: {"user_id": ret[0].user_id},
+                            dataType: "json",
+                            beforeSend: function () {
+                                layer.load(2);
+                                $("#submit").attr({disabled: "disabled"});
+                            },
+                            success: function (ret) {
+                                layer.closeAll('loading');
+                                if (ret == 0) {
+                                    $node = $("<h4>您还未发表过游记！</h4>");
+                                    $('#play').append($node);
+                                } else {
+                                    for (var i = 0; i < ret.length; i++) {
+                                        $node = $(' <div class="oneStrategy" >\n' +
+                                            '        <div class="strategy_info">\n' +
+                                            '            <div class="strategy_info_left">\n' +
+                                            '                <h2 class="strategy_info_title">' + ret[i].strategy_title + '</h2>\n' +
+                                            '                <span class="strategy_info_address">' + ret[i].strategy_address + '</span>\n' +
+                                            '                <span class="strategy_info_days">' + ret[i].strategy_days + '</span>\n' +
+                                            '                <span class="strategy_info_type">' + ret[i].strategy_season + '</span>\n' +
+                                            '                <span class="strategy_info_status">' + ret[i].strategy_type + '</span>\n' +
+                                            '            </div>\n' +
+                                            '            <div class="strategy_info_img">\n' +
+                                            '                <img src= "../' + ret[i].strategy_firstimg + '" alt="图片无法显示" id="strategy_info_img">\n' +
+                                            '            </div>\n' +
+                                            '        </div>\n' +
+                                            '        <div class="strategy_option">\n' +
+                                            '            <h3 class="strategy_info_status">' + ret[i].strategy_status + '</h3>\n' +
+                                            '            <div class="strategy_info_but" id="' + ret[i].strategy_id + '" >\n' +
+                                            '                <a class="option edit">编辑</a>\n' +
+                                            '                <a class="option show">查看</a>\n' +
+                                            '                <a class="option delete">删除</a>\n' +
+                                            '            </div>\n' +
+                                            '\n' +
+                                            '        </div>\n' +
+                                            '    </div>');
+                                        $('#play').append($node);
+                                        // 未审核的可以编辑
+                                        if (ret[i].strategy_status == "未审核"){
+                                            $("#"+ret[i].strategy_id).parent().children("h3").css("color","rgba(255,87,34,0.89)");
+                                            $("#"+ret[i].strategy_id).children(".show").remove();
+                                        }else {
+                                            $("#"+ret[i].strategy_id).children(".edit").remove();
+                                        }
+                                    }
+
+                                }
+
+                            },
+                            error: function (ret) {
+                                layer.closeAll('loacing');
+                                layer.msg("请求数据失败!")
+                                // layer.alert("error" + ret.message);
+                            }
+                        })
+                    }
+                }, error: function (a, b, c) {
+                    layer.alert(a.responseText);
+                    // layer.alert(a.status);
+                    // layer.alert(c);
+
+                }
+            });
+
+
+
+            $("body").on("click", ".edit", function () {
+                var id = $(this).parent().attr("id");
+                window.location.href="UpdateStrategyForm.html?id="+id;
+            });
+            $("body").on("click", ".show", function () {
+                var id = $(this).parent().attr("id");
+                parent.window.location.href="../show.html?id="+id;
+            });
+            $("body").on("click", ".delete", function () {
+                var id = $(this).parent().attr("id");
+                var $del = $(this).parent().parent().parent();
+                layer.confirm('您确定要删除吗？', {
+                    btn: ['确定', '在考虑一下'] //按钮
+                }, function () {
+                    layer.load(2);
+                    $.ajax({
+                        url: "/DeleteStrategyPlace",
+                        type: "post",
+                        data: {"strategy_id": id},
+                        dataType: "text",
+                        success: function (ret) {
+                            layer.closeAll('loading');
+                            if (ret == "1") {
+                                layer.msg("删除成功！", {icon: 6});
+                                $del.remove();
+                                setTimeout("window.location.href='playInfo.html'", 3000);
+                            } else {
+                                layer.closeAll('loading');
+                                layer.msg('删除失败！', {icon: 5});
+                            }
+                        }
+                    })
+                }, function () {
+                });
+            });
+        })
+    </script>
+    <link rel="stylesheet" href="../css/users.css">
+</head>
+<body>
+
+<div id="play">
+    <div class="person_strategy"><h1>个人游记</h1></div>
+    <hr/>
+</div>
+
+<script type="text/javascript">
+    // $(function () {
+    //     $.ajax({
+    //         url: "/QueryUserStrategy",
+    //         type: "post",
+    //         data: {"user_id": 1},
+    //         dataType: "json",
+    //         beforeSend: function () {
+    //             layer.load(2);
+    //             $("#submit").attr({disabled: "disabled"});
+    //         },
+    //         success: function (ret) {
+    //             layer.closeAll('loading');
+    //             if (ret == 0) {
+    //                 $node = $("<h2 style='color: red'>您还未发表过游记！</h2>");
+    //                 $('#play').append($node);
+    //             } else {
+    //                 for (var i = 0; i < ret.length; i++) {
+    //                     $node = $(' <div class="oneStrategy" >\n' +
+    //                         '        <div class="strategy_info">\n' +
+    //                         '            <div class="strategy_info_left">\n' +
+    //                         '                <h2 class="strategy_info_title">' + ret[i].strategy_title + '</h2>\n' +
+    //                         '                <span class="strategy_info_address">' + ret[i].strategy_address + '</span>\n' +
+    //                         '                <span class="strategy_info_days">' + ret[i].strategy_days + '</span>\n' +
+    //                         '                <span class="strategy_info_type">' + ret[i].strategy_season + '</span>\n' +
+    //                         '                <span class="strategy_info_status">' + ret[i].strategy_type + '</span>\n' +
+    //                         '            </div>\n' +
+    //                         '            <div class="strategy_info_img">\n' +
+    //                         '                <img src= "../' + ret[i].strategy_firstimg + '" alt="图片无法显示" id="strategy_info_img">\n' +
+    //                         '            </div>\n' +
+    //                         '        </div>\n' +
+    //                         '        <div class="strategy_option">\n' +
+    //                         '            <h3 class="strategy_info_status">' + ret[i].strategy_status + '</h3>\n' +
+    //                         '            <div class="strategy_info_but" id="' + ret[i].strategy_id + '" >\n' +
+    //                         '                <a class="option edit">编辑</a>\n' +
+    //                         '                <a class="option show">查看</a>\n' +
+    //                         '                <a class="option delete">删除</a>\n' +
+    //                         '            </div>\n' +
+    //                         '\n' +
+    //                         '        </div>\n' +
+    //                         '    </div>');
+    //                     $('#play').append($node);
+    //                     //未审核的可以编辑
+    //                     if (ret[i].strategy_status == "未审核"){
+    //                         $("#"+ret[i].strategy_id).parent().children("h3").css("color","rgba(255,87,34,0.89)");
+    //                         $("#"+ret[i].strategy_id).children(".show").remove();
+    //                     }else {
+    //                         $("#"+ret[i].strategy_id).children(".edit").remove();
+    //                     }
+    //                 }
+    //
+    //             }
+    //
+    //         },
+    //         error: function (ret) {
+    //             layer.closeAll('loacing');
+    //             layer.msg("请求数据失败!")
+    //             // layer.alert("error" + ret.message);
+    //         }
+    //     })
+    // });
+
+
+</script>
+<!--<script src="../js/playInfo.js"></script>-->
+</body>
+</html>

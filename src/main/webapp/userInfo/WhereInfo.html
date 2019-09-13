@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color:#f2f2f0 ">
+<head>
+    <meta charset="UTF-8">
+    <title>我的想去</title>
+    <link rel="stylesheet" href="../css/wannaGo.css">
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script src="../js/userInfo.js"></script>
+    <script>
+        $(function () {
+            var user_id;
+            $.ajax({
+                url: "/getSession",
+                type: "post",
+                data: {"sessionid": "sessionkey"},
+                dataType: "json",
+                success: function (ret) {
+                    user_id = ret[0].user_id;
+                    $.ajax({
+                        url:"/ShowwannerServlet",
+                        data:{"user_id":user_id},
+                        type:"post",
+                        dataType:"json",
+                        success:function (list) {
+                            for(var i=0;i<list.length;i++){
+                                $.ajax({
+                                    url:"/SelectOneStrategyServlet",
+                                    data:{"strategy_id":list[i].startegy_id1},
+                                    dataType:"json",
+                                    type:"post",
+                                    success:function (result) {
+                                        for(var i=0;i<result.length;i++){
+                                            var $node=('  <div class="general_iteam margin-bottom-20 bg-color-white css-table" id="iteam-650" style="float: left">\n' +
+                                                '            <img href="#" class="main-img" src="../'+result[i].strategy_firstimg+'" style="width: 250px;float: left;height: 200px" >\n' +
+                                                '            <div class="detail css-cell">\n' +
+                                                '                <div>\n' +
+                                                '                    <div class="margin-bottom-10">\n' +
+                                                '                        <h3>'+result[i].strategy_title+'</h3>\n' +
+                                                '                        <small>'+result[i].strategy_address+'</small>\n' +
+                                                '                    </div>\n' +
+                                                '                    <div class="price">\n' +
+                                                '                        ¥<strong>'+result[i].strategy_money+'</strong>\n' +
+                                                '                    </div>\n' +
+                                                '                </div>\n' +
+                                                '\n' +
+                                                '            </div>\n' +
+                                                '\n' +
+                                                '        </div>')
+                                            $("#WhereInfo").append($node);
+                                        }
+
+                                    }
+                                })
+                            }
+                        }
+                    })
+                    if (ret == null) {
+                        setTimeout("javascript:window.location.href='login1.html'", 1000);
+                    } else {
+
+                        $("#bs-example-navbar-collapse-1 ul li:eq(3)").text("您好，" + ret[0].user_name);
+                    }
+
+                }, error: function (a, b, c) {
+                    alert(a.responseText);
+                    alert(a.status);
+                    alert(c);
+
+                }
+            });
+
+        })
+
+    </script>
+</head>
+<body>
+<div>
+    <h2 id="Where">我想去</h2>
+    <div id="WhereInfo" style="overflow: auto">
+
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -9,7 +9,7 @@ import java.util.Date;
 public class JsonDateValueProcessor implements JsonValueProcessor {
 
     // 定义转换日期类型的输出格式
-    private String format = "yyyy-MM-dd";
+    private String format = "yyyy-MM-dd HH:MM:SS";
 
     public JsonDateValueProcessor() {
 

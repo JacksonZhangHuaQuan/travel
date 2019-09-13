@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User</title>
+    <!--<link rel="stylesheet" href="../css/users1.css">-->
+    <link rel="stylesheet" href="../layer-v3.1.1/layer/theme/default/layer.css">
+    <script src="../js/jquery-3.3.1.js"></script>
+
+    <script src="../js/layui/layer.js"></script>
+    <script src="layer-v3.1.1/layer/layer.js" type="application/javascript"></script>
+    <script src="../js/userInfo.js"></script>
+    <script src="../js/messages_zh.js"></script>
+    <script src="../js/jquery.validate.js"></script>
+
+    <script>
+        $(function () {
+            $("#showimg").click(function () {
+                $("#img").trigger("click");
+            });
+            $("#img").change(function (e) {
+                //alert("change")
+                var img = e.target.files[0];
+                // 判断是否图片
+                if (!img) {
+                    return;
+                }
+                // 判断图片格式
+                if (!(img.type.indexOf('image') == 0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name))) {
+                    layer.msg('图片只能是jpg,gif,png');
+                    return;
+                }
+                var reader = new FileReader();
+                reader.readAsDataURL(img);
+                reader.onload = function (e) {
+                    // ajax 上传图片
+                    $.post("/uploadPic", {img: e.target.result}, function (ret) {
+                        if (ret.imgUrl != '') {
+                            //显示图片
+                            $('#showimg').attr("src", ret.imgUrl);
+                            imgurl=ret.imgUrl;
+                        }
+                    }, 'json');
+                }
+            })
+            var imgurl;
+            var id;
+            $.ajax({
+                url: "/getSession",
+                type: "post",
+                data: {"sessionid": "sessionkey"},
+                dataType: "json",
+                success: function (ret) {
+                    if (ret == null) {
+                        setTimeout("javascript:window.location.href='login1.html'", 1000);
+                    } else {
+                        console.log(ret);
+                        id=ret[0].user_id;
+                        $("#bs-example-navbar-collapse-1 ul li:eq(3)").text("您好！，" + ret[0].user_name);
+                        $.ajax({
+                            url: "/ShowUserServlet",
+                            type: "post",
+                            data: {"id": id},
+                            dataType: "json",
+                            success:function (ret) {
+                                $(".font:eq(0)").val(ret[0].user_name);
+                                $(".font:eq(1)").val(ret[0].user_pet_name);
+                                var date=ret[0].user_birthday;
+                                dates=date.split("-");
+                                $("#year").val(dates[0]);
+                                $("#month").val(dates[1]);
+                                $("#day").val(dates[2]);
+                                $("#number .font").val(ret[0].user_phone);
+                                $("#introduce_con").text(ret[0].user_introduce)
+                                if(ret[0].user_gender=="女士"){
+                                    $("input[name='woman']").attr('checked','true');
+                                }
+                                if(ret[0].user_gender=="男士"){
+                                    $("input[name='man']").attr('checked','true');
+                                }
+                                if(ret[0].user_role=="普通人员"){
+                                    $("#pole option:eq(1)").attr("selected","selected");
+                                }else{
+                                    $("#pole option:eq(0)").attr("selected","selected");
+                                }
+                                $("#showimg").attr("src",ret[0].user_photo);
+                            }
+                        })
+                    }
+
+                }, error: function (a, b, c) {
+                    alert(a.responseText);
+                    alert(a.status);
+                    alert(c);
+                }
+            })
+            $("input[type='button']").click(function () {
+                var gender= $("input[type='radio']:checked").val();
+                var name=$(".font:eq(0)").val();
+                var petname=$(".font:eq(1)").val();
+                var introduce= $("#introduce_con").val();
+                var year= $("#year").val();
+                var month=$("#month").val();
+                var day=$("#day").val();
+                var birthday=year+"-"+month+"-"+day;
+                $.ajax({
+                    url:"/UpdateUserServlet",
+                    dataType:"json",
+                    data:{"gender":gender,"name":name,"petname":petname,"introduce":introduce,"birthday":birthday,"userid":id,"imgurl":imgurl},
+                    type:"post",
+                    success:function (ret) {
+                        if(ret==1){
+                            layer.msg("提交成功", {time: 1000}, function () {
+                                $.ajax({
+                                    url: "/ShowUserServlet",
+                                    type: "post",
+                                    data: {"id": id},
+                                    dataType: "json",
+                                    success:function (ret) {
+                                        $(".font:eq(0)").val(ret[0].user_name);
+                                        $(".font:eq(1)").val(ret[0].user_pet_name);
+                                        var date=ret[0].user_birthday;
+                                        dates=date.split("-");
+                                        $("#year").val(dates[0]);
+                                        $("#month").val(dates[1]);
+                                        $("#day").val(dates[2]);
+                                        $("#number .font").val(ret[0].user_phone);
+                                        $("#introduce_con").text(ret[0].user_introduce)
+                                        if(ret[0].user_gender=="女士"){
+                                            $("input[name='woman']").attr('checked','true');
+                                        }
+                                        if(ret[0].user_gender=="男士"){
+                                            $("input[name='man']").attr('checked','true');
+                                        }
+                                        if(ret[0].user_role=="普通人员"){
+                                            $("#pole option:eq(1)").attr("selected","selected");
+                                        }else{
+                                            $("#pole option:eq(0)").attr("selected","selected");
+                                        }
+                                        $("#showimg").attr("src",ret[0].user_photo);
+                                    }
+                                })
+                            })
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+    <style type="text/css">
+        body {
+            margin: 0px;
+            background: #f2f2f0;
+        }
+        #showimg{position: absolute;
+            left: 3px;
+            width: 100px;height:100px;border-radius: 50%}
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            $("#showimg").click(function () {
+                $("#img").trigger("click");
+            });
+            $("#img").change(function (e) {
+                //alert("change")
+                var img = e.target.files[0];
+                // 判断是否图片
+                if (!img) {
+                    return;
+                }
+                // 判断图片格式
+                if (!(img.type.indexOf('image') == 0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name))) {
+                    layer.msg('图片只能是jpg,gif,png');
+                    return;
+                }
+                var reader = new FileReader();
+                reader.readAsDataURL(img);
+                reader.onload = function (e) {
+                    // ajax 上传图片
+                    $.post("/uploadPic", {img: e.target.result}, function (ret) {
+                        if (ret.imgUrl != '') {
+                            //显示图片
+                            $('#showimg').attr("src", ret.imgUrl)
+                        }
+                    }, 'json');
+                }
+            })
+        });
+    </script>
+    <link rel="stylesheet" href="../css/users.css">
+    <!--<link rel="stylesheet" href="../css/users.css">-->
+</head>
+<body>
+<div id="edit1">
+    <div id="edit">
+        <div id="mm">
+            <div class="message_right_img">
+                <div id="img11" >
+                    <img id="showimg" src="../images/users/photo.jpg" >
+                    <p><input type="file" class="file" id="img" style="overflow:hidden; width: 0%; height: 0%;"></p>
+                </div>
+            </div>
+            <div class="message_right_content">
+                <form id="message_right_content_form" method="post">
+                    <div id="head">
+                        <h3 id="head_info">个人信息</h3>
+                        <span id="content">我们需要提供一下信息</span>
+                    </div>
+                    <div id="sex">
+                        <span class="font_1">称&nbsp;谓&nbsp;</span>
+                        <input  clsss="sex_person" type="radio" name="sex" value="先生" checked="checked">先生
+                        <input class="sex_person" type="radio" name="sex" value="女士">女士
+                        <br></div>
+                    <div id="name"><span class="font_1" readonly="true">用户名</span>
+                        <input   class="font" type="text" name="name">
+                        <br></div>
+                    <div id="pet_name"><span class="font_1" >昵&nbsp;称</span>
+                        <input  class="font" type="text"name="user_pet_name">
+                        <br></div>
+                    <div><span class="font_1">角&nbsp;色</span>
+                        <select id="pole" disabled="true">
+                            <option>会员</option>
+                            <option>普通人员</option>
+                        </select>
+                        <br></div>
+                    <div id="time"><span class="font_1">生&nbsp;日</span>
+                        <!--<input type="date">-->
+                        <input class="font" id="year" type="text">&nbsp;年
+                        <input class="font" id="month"  type="text">&nbsp;月
+                        <input class="font" id="day" type="text">&nbsp;日
+                        <br></div>
+                    <div id="number"><span class="font_1" >电话号码</span>
+                        <input  class="font" type="text" name="user_phone" disabled="true">
+                        <br>
+                    </div>
+                    <div id="introduce"><span class="font_1">自我介绍</span><br>
+                        <textarea  class="font" id="introduce_con" name="introduce"></textarea>
+                        <br></div>
+                    <input id="input_button_submit" type="button" value="保存修改">
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

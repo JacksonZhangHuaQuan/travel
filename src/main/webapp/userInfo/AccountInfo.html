@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <script src="../js/jquery-3.3.1.js"></script>
+    <link rel="stylesheet" href="../css/users.css">
+    <style type="text/css">
+        body {
+            margin: 0px;
+            background: #f2f2f0;
+        }
+        #showimg{position: absolute;
+            left: 3px;
+            width: 100px;height:100px;border-radius: 50%}
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            $("#showimg").click(function () {
+                $("#img").trigger("click");
+            });
+            $("#img").change(function (e) {
+                //alert("change")
+                var img = e.target.files[0];
+                // 判断是否图片
+                if (!img) {
+                    return;
+                }
+                // 判断图片格式
+                if (!(img.type.indexOf('image') == 0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name))) {
+                    layer.msg('图片只能是jpg,gif,png');
+                    return;
+                }
+                var reader = new FileReader();
+                reader.readAsDataURL(img);
+                reader.onload = function (e) {
+                    // ajax 上传图片
+                    $.post("/uploadPic", {img: e.target.result}, function (ret) {
+                        if (ret.imgUrl != '') {
+                            //显示图片
+                            $('#showimg').attr("src", ret.imgUrl);
+                            alert(ret.imgUrl)
+                        }
+                    }, 'json');
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+<div>
+    <div id="Account">
+        <div class="AccountInfo">
+            <div id="img11" >
+                <img id="showimg" src="../images/users/photo.jpg" >
+                <p><input type="file" class="file" id="img" style="overflow:hidden; width: 0%; height: 0%;"></p>
+            </div>
+
+            <div id="Info">
+                <div id="Infopet">
+                    <span id="Infopet1">我是小时奥</span>
+                </div>
+                <div id="Infogender">
+                    <span id="gender">性别：</span>
+                    <br>
+                    <span id="birthday">&nbsp;&nbsp;&nbsp;生日：</span>
+                </div>
+                <!--<div id="Info_role">我的角色是：</div>-->
+                <span id="introduce1">个人介绍:</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            var id;
+            $.ajax({
+                url:"/getSession",
+                type:"post",
+                data: {"sessionid":"sessionkey"},
+                dataType:"json",
+                success:function (ret) {
+                    if(ret==null){
+                        setTimeout("javascript:window.location.href='login1.html'",1000);
+                    }else {
+                        console.log(ret);
+                        id=ret[0].user_id;
+                        $.ajax({
+                            url: "/ShowUserServlet",
+                            type: "post",
+                            data: {"id": id},
+                            dataType: "json",
+                            success:function (ret) {
+                                $("#Infopet1").text("昵称：" + ret[0].user_pet_name);
+                                $("#gender").text("称谓：" + ret[0].user_gender);
+                                $("#birthday").text("生日：" + ret[0].user_birthday);
+                                $("#introduce1").text("自我介绍：" + ret[0].user_introduce);
+                                // $("#Info_role").text("角色：" + ret[0].user_role);
+                                // $("#img11").text(ret[0].user_photo);
+                                $("#bs-example-navbar-collapse-1 ul li:eq(3)").text("您好！，" + ret[0].user_name)
+                                $("#showimg").attr("src",ret[0].user_photo);
+                            }
+                        })
+                    }
+                },error:function (a,b,c) {
+                    //alert(a.responseText);
+                    // alert(a.status);
+                    // alert(c);
+
+                }
+            })
+
+        })
+    </script>
+</div>
+</body>
+</html>
